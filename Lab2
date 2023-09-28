@@ -1,26 +1,35 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
+// This contract is used to store a single data value.
 contract StorageContract {
+// State variable to store the data
     uint256 public data;
 
+// Function to set the data value
     function setData(uint256 _newData) public {
         data = _newData;
     }
 }
 
+// This contract interacts with StorageContract using delegatecall to update its data.
 contract DelegateCaller {
+// Address of the StorageContract instance
     address public storageContractAddress;
 
+// Constructor to set the storage contract address during deployment
     constructor(address _storageContractAddress) {
         storageContractAddress = _storageContractAddress;
     }
 
+// Function to update the data in the StorageContract using delegatecall
     function updateStorage(uint256 _newData) public {
+// using the provided _newData argument
         (bool success, ) = storageContractAddress.delegatecall(
             abi.encodeWithSignature("setData(uint256)", _newData)
         );
 
+// Check if the delegatecall was successful, and revert if it failed
         require(success, "Delegate call failed");
     }
 }

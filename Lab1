@@ -1,0 +1,75 @@
+ //SPDX-License-Identifier: MIT
+pragma solidity 0.8.0;
+
+library BCDV4028 {
+
+    function sort(uint[] memory arr) internal pure returns (uint[] memory) {
+        uint n = arr.length;
+        bool swapped;
+        
+        for (uint i = 0; i < n - 1; i++) {
+            swapped = false;
+            for (uint j = 0; j < n - i - 1; j++) {
+                if (arr[j] > arr[j + 1]) {
+                    (arr[j], arr[j + 1]) = (arr[j + 1], arr[j]);
+                    swapped = true;
+                }
+            }
+            
+            if (!swapped) {
+                break;
+            }
+        }
+        
+        return arr;
+    }
+
+    function removeDuplicates(uint[] memory arr) internal pure returns (uint[] memory) {
+        uint[] memory uniqueArr = new uint[](arr.length);
+        uint uniqueCount = 0;
+
+        for (uint i = 0; i < arr.length; i++) {
+            bool isDuplicate = false;
+            
+            for (uint j = 0; j < uniqueCount; j++) {
+                if (arr[i] == uniqueArr[j]) {
+                    isDuplicate = true;
+                    break;
+                }
+            }
+
+            if (!isDuplicate) {
+                uniqueArr[uniqueCount] = arr[i];
+                uniqueCount++;
+            }
+        }
+
+        uint[] memory result = new uint[](uniqueCount);
+        for (uint i = 0; i < uniqueCount; i++) {
+            result[i] = uniqueArr[i];
+        }
+
+        return result;
+    }
+}
+
+contract Git {
+    using BCDV4028 for uint[];
+
+    uint[] public data;
+
+    function setData(uint[] memory _data) public {
+        data = _data;
+    }
+
+    function sortData() view public {
+        data.sort();
+    }
+
+    function removeDuplicatesFromData() view public {
+        data.removeDuplicates();
+    }
+}
+
+
+
